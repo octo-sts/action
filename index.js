@@ -30,7 +30,9 @@ fetch(`${actionsUrl}&audience=octo-sts.dev`, { headers: { 'Authorization': `Bear
                             if (!json.token) { console.log(`::error::${json.message}`); process.exit(1); }
                             const tok = json.token;
                             console.log(`::add-mask::${tok}`);
-                            require('fs').appendFile(process.env.GITHUB_OUTPUT, `token=${tok}`, function (err) { if (err) throw err; });
+                            const fs = require('fs');
+                            fs.appendFile(process.env.GITHUB_OUTPUT, `token=${tok}`, function (err) { if (err) throw err; }); // Write the output.
+                            fs.appendFile(process.env.GITHUB_STATE, `token=${tok}`, function (err) { if (err) throw err; }); // Write the state, so the post job can delete the token.
                         })
                     )
                     .catch(err => { console.log(`::error::${err.stack}`); process.exit(1); });

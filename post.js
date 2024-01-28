@@ -1,4 +1,10 @@
-const tok = 'HOW DO I GET THIS';
+const tok = process.env.STATE_TOKEN;
+
+if (!tok) {
+    console.log(`::warning::Token not found in state file.`);
+    process.exit(0);
+}
+
 fetch('https://api.github.com/installation/token', {
     method: 'DELETE',
     headers: {
