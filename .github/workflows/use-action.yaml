@@ -2,6 +2,8 @@ name: Use Action
 
 on:
   workflow_dispatch:
+  pull_request_target:
+    branches: ['main']
   push:
     branches: ['main']
 
@@ -14,8 +16,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+
       - id: octo-sts
-        uses: imjasonh/octo-sts-action@main
+        uses: ./
         with:
           scope: ${{github.repository}}
           identity: use-action
