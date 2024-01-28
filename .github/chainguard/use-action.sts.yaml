@@ -4,4 +4,5 @@ claim_pattern:
   job_workflow_ref: chainguard-dev/octo-sts-js/.github/workflows/use-action.yaml@refs/heads/main
 
 permissions:
+  contents: read
   issues: write
