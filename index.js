@@ -6,7 +6,7 @@ if (!actionsToken || !actionsUrl) {
     process.exit(1);
 }
 
-fetch(`${actionsUrl}?audience=octo-sts.dev`, { headers: { 'Authorization': `Bearer ${actionsToken}` } })
+fetch(`${actionsUrl}&audience=octo-sts.dev`, { headers: { 'Authorization': `Bearer ${actionsToken}` } })
     .then(res => {
         console.log(res.status);
         res.json()
