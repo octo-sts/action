@@ -13,7 +13,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: chainguard-dev/octo-sts-js@main
+      - id: octo-sts
+        uses: chainguard-dev/octo-sts-js@main
         with:
           scope: chainguard-dev/octo-sts-js
           identity: use-action
+
+      - uses: actions/checkout@v2
+      - run: date +%s > date.txt
+      - uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ steps.octo-sts.outputs.token }}
+          commit-message: Use Action
+          title: Use Action
+          body: |
+            This PR was created using an Octo STS token
