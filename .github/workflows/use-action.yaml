@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - id: octo-sts
-        uses: ./
+        uses: imjasonh/octo-sts-action@main
         with:
           scope: ${{github.repository}}
           identity: use-action
