@@ -30,7 +30,7 @@ fetch(`${actionsUrl}&audience=octo-sts.dev`, { headers: { 'Authorization': `Bear
                             if (!json.token) { console.log(`::error::${json.message}`); process.exit(1); }
                             const tok = json.token;
                             console.log(`::add-mask::${tok}`);
-                            process.env.GITHUB_OUTPUT += `token=${tok}`;
+                            require('fs').appendFile(process.env.GITHUB_OUTPUT, `token=${tok}`, function (err) { if (err) throw err; });
                         })
                     )
                     .catch(err => { console.log(`::error::${err.stack}`); process.exit(1); });
