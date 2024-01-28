@@ -1,0 +1,19 @@
+name: Use Action
+
+on:
+  push:
+    branches: ['main']
+
+permissions:
+  id-token: write # Needed to federate with octo-sts
+
+jobs:
+  use-action:
+    name: Use Action
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: imjasonh/octo-sts-js@main
+        with:
+          scope: imjasonh/octo-sts-js
+          identity: use-action

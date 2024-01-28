@@ -1,0 +1,11 @@
+name: 'Octo STS'
+description: 'Exchange a GitHub Actions OIDC token for a short-lived app token'
+inputs:
+  # TODO
+outputs:
+  token:
+    description: 'The token that was generated'
+runs:
+  using: 'node20'
+  main: 'index.js'
+  post: 'post.js'

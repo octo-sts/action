@@ -1,0 +1,9 @@
+# Match these literal values in the respective claims
+issuer: https://accounts.google.com
+subject: 1234567890 # This is the "unique id" of the Google Service Account
+
+# (optionally) match the "email" version (beware: the values are regular expressions)
+claim_pattern:
+  email: baz@blah\.iam\.gserviceaccount\.com
+
+...
