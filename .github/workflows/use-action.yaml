@@ -19,12 +19,6 @@ jobs:
           scope: chainguard-dev/octo-sts-js
           identity: use-action
 
-      - uses: actions/checkout@v2
-      - run: date +%s > date.txt
-      - uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ steps.octo-sts.outputs.token }}
-          commit-message: Use Action
-          title: Use Action
-          body: |
-            This PR was created using an Octo STS token
+      - env:
+          GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
+        run: gh issue create --title "Use Action" --body "This issue was created using an Octo STS token"

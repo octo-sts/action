@@ -16,16 +16,10 @@ if (!scope || !identity) {
 
 fetch(`${actionsUrl}&audience=octo-sts.dev`, { headers: { 'Authorization': `Bearer ${actionsToken}` } })
     .then(res => {
-        console.log('Fetching workflow OIDC...');
-        console.log(res.status);
         res.json()
             .then(json => {
-                console.log('Got JSON', json);
-                const ghtok = json.value;
-                console.log('Fetching from octo-sts.dev...');
-                fetch(`https://octo-sts.dev/sts/exchange?scope=${scope}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${ghtok}` } })
+                fetch(`https://octo-sts.dev/sts/exchange?scope=${scope}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${json.value}` } })
                     .then(res => res.json()
-                        .catch(err => { console.log(`::error::${err.stack}`); process.exit(1); })
                         .then(json => {
                             if (!json.token) { console.log(`::error::${json.message}`); process.exit(1); }
                             const tok = json.token;
@@ -35,7 +29,6 @@ fetch(`${actionsUrl}&audience=octo-sts.dev`, { headers: { 'Authorization': `Bear
                             fs.appendFile(process.env.GITHUB_STATE, `token=${tok}`, function (err) { if (err) throw err; }); // Write the state, so the post job can delete the token.
                         })
                     )
-                    .catch(err => { console.log(`::error::${err.stack}`); process.exit(1); });
             })
     })
     .catch(err => { console.log(`::error::${err.stack}`); process.exit(1); });
