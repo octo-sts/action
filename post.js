@@ -1,4 +1,4 @@
-const tok = process.env.STATE_TOKEN;
+const tok = process.env.STATE_token;
 
 if (!tok) {
     console.log(`::warning::Token not found in state file.`);
@@ -7,11 +7,7 @@ if (!tok) {
 
 fetch('https://api.github.com/installation/token', {
     method: 'DELETE',
-    headers: {
-        'Authorization': `Bearer ${tok}`,
-        'Accept': 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2022-11-28'
-    }
+    headers: { 'Authorization': `Bearer ${tok}` },
 })
     .then(res => {
         if (res.status == 204) {
