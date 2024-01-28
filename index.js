@@ -17,7 +17,7 @@ fetch(`${actionsUrl}&audience=octo-sts.dev`, { headers: { 'Authorization': `Bear
                 const identity = process.env.INPUT_identity;
                 fetch(`https://octo-sts.dev/sts/exchange?scope=${scope}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${ghtok}` } })
                     .then(res => res.json()
-                        .catch(err => { console.log(`::error::${err}`); process.exit(1); })
+                        .catch(err => { console.log(`::error::${err.stack}`); process.exit(1); })
                         .then(json => {
                             if (!json.token) { console.log(`::error::${json.message}`); process.exit(1); }
                             const tok = json.token;
@@ -25,7 +25,7 @@ fetch(`${actionsUrl}&audience=octo-sts.dev`, { headers: { 'Authorization': `Bear
                             process.env.GITHUB_OUTPUT += `token=${tok}`;
                         })
                     )
-                    .catch(err => { console.log(`::error::${err}`); process.exit(1); });
+                    .catch(err => { console.log(`::error::${err.stack}`); process.exit(1); });
             })
     })
-    .catch(err => { console.log(`::error::${err}`); process.exit(1); });
+    .catch(err => { console.log(`::error::${err.stack}`); process.exit(1); });
