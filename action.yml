@@ -1,10 +1,31 @@
+# Copyright 2024 Chainguard, Inc.
+# SPDX-License-Identifier: Apache-2.0
+
 name: 'Octo STS'
-description: 'Exchange a GitHub Actions OIDC token for a short-lived app token'
+description: |
+  This action exchanges the workflow's identity token for a Github App token
+  from the Octo STS service, in accordance with the trust policy of the target
+  organization or repository.
+
 inputs:
-  # TODO
+  scope:
+    description: |
+      The org/repo of the repository to which to request access.
+    required: true
+
+  identity:
+    description: |
+      The name of the trust policy to load from the target repository. The trust policy
+      is loaded from https://github.com/{scope} from the file
+      .github/chainguard/{identity}.sts.yaml
+    required: true
+
 outputs:
   token:
-    description: 'The token that was generated'
+    description: |
+      The federated token to use for authentication.
+    value: ${{ steps.octo-sts.outputs.token }}
+
 runs:
   using: 'node20'
   main: 'index.js'
