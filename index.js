@@ -6,8 +6,8 @@ if (!actionsToken || !actionsUrl) {
     process.exit(1);
 }
 
-const scope = process.env.INPUT_scope;
-const identity = process.env.INPUT_identity;
+const scope = process.env.INPUT_SCOPE;
+const identity = process.env.INPUT_IDENTITY;
 
 if (!scope || !identity) {
     console.log(`::error::Missing required inputs 'scope' and 'identity'`);
