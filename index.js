@@ -10,13 +10,18 @@ fetch(`${actionsUrl}?audience=octo-sts.dev`, { headers: { 'Authorization': `Bear
             .then(json => {
                 if (!json.token) {
                     console.log(`::error::${json.message}`);
-                    return;
+                    process.exit(1);
                 }
                 const tok = json.token;
                 console.log(`::add-mask::${tok}`);
                 process.env.GITHUB_OUTPUT += `token=${tok}`;
             })
+            .catch(err => {
+                console.log(`::error::${err}`);
+                process.exit(1);
+            }
     })
     .catch(err => {
         console.log(`::error::${err}`);
+        process.exit(1);
     });
