@@ -19,7 +19,7 @@ fetch(`${actionsUrl}?audience=octo-sts.dev`, { headers: { 'Authorization': `Bear
             .catch(err => {
                 console.log(`::error::${err}`);
                 process.exit(1);
-            }
+            });
     })
     .catch(err => {
         console.log(`::error::${err}`);
