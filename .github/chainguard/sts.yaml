@@ -1,9 +1,8 @@
-# Match these literal values in the respective claims
-issuer: https://accounts.google.com
-subject: 1234567890 # This is the "unique id" of the Google Service Account
-
-# (optionally) match the "email" version (beware: the values are regular expressions)
+issuer: https://token.actions.githubusercontent.com
+subject: repo:imjasonh/octo-sts-js:ref:refs/heads/main
 claim_pattern:
-  email: baz@blah\.iam\.gserviceaccount\.com
+  job_workflow_ref: imjasonh/octo-sts-js/.github/workflows/use-action.yaml@refs/heads/main
 
-...
+permissions:
+  pull_requests: write
+  workflows: write
