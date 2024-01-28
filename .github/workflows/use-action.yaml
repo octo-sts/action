@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: imjasonh/octo-sts-js@main
+      - uses: chainguard-dev/octo-sts-js@main
         with:
-          scope: imjasonh/octo-sts-js
+          scope: chainguard-dev/octo-sts-js
           identity: use-action
