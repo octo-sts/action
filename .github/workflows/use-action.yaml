@@ -15,12 +15,11 @@ jobs:
 
     steps:
       - id: octo-sts
-        uses: chainguard-dev/octo-sts-action@main
+        uses: ./
         with:
-          scope: chainguard-dev/octo-sts-action
+          scope: ${{github.repository}}
           identity: use-action
 
-      - uses: actions/checkout@v4
       - env:
           GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
-        run: gh issue create --title "Use Action" --body "This issue was created using an Octo STS token"
+        run: gh issue create --title "Use Action" --body "This issue was created using an Octo STS token" -R ${{github.repository}}
