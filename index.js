@@ -13,6 +13,8 @@ fetch(`${actionsUrl}&audience=octo-sts.dev`, { headers: { 'Authorization': `Bear
             .then(json => {
                 console.log(json)
                 const ghtok = json.token;
+                const scope = process.env.INPUT_scope;
+                const identity = process.env.INPUT_identity;
                 fetch(`https://octo-sts.dev/sts/exchange?scope=${scope}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${ghtok}` } })
                     .then(res => res.json()
                         .catch(err => { console.log(`::error::${err}`); process.exit(1); })
