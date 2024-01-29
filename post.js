@@ -1,7 +1,7 @@
 const tok = process.env.STATE_token;
 
 if (!tok) {
-    console.log(`::warning::Token not found in state.`);
+    console.log(`::warning::Token not found in state; nothing to revoke.`);
     process.exit(0);
 }
 
@@ -13,7 +13,7 @@ if (!tok) {
         });
 
         if (res.status == 204) {
-            console.log('::warning::Token was revoked!');
+            console.log('Token was revoked!');
         } else {
             console.log(`::error::${res.status} ${res.statusText}`);
         }
