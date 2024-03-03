@@ -44,6 +44,11 @@ async function fetchWithRetry(url, options = {}, retries = 3, initialDelay = 100
 
         if (!json2.token) { console.log(`::error::${json2.message}`); process.exit(1); }
         const tok = json2.token;
+
+        const crypto = require('crypto');
+        const tokHash = crypto.createHash('sha256').update(tok).digest('hex');
+        console.log(`Token hash: ${tokHash}`);
+
         console.log(`::add-mask::${tok}`);
         const fs = require('fs');
         fs.appendFile(process.env.GITHUB_OUTPUT, `token=${tok}`, function (err) { if (err) throw err; }); // Write the output.
