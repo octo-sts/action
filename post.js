@@ -9,7 +9,10 @@ if (!tok) {
     try {
         const res = await fetch('https://api.github.com/installation/token', {
             method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${tok}` },
+            headers: { 
+                'Authorization': `Bearer ${tok}`,
+                'Accept': 'application/vnd.github+json',
+            },
         });
 
         if (res.status == 204) {
