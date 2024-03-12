@@ -10,7 +10,7 @@ permissions:
   id-token: write # Needed to federate tokens.
 
 steps:
-- uses: chainguard-dev/octo-sts-action@main
+- uses: octo-sts/action@main
   id: octo-sts
   with:
     scope: your-org/your-repo
