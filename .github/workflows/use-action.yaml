@@ -15,9 +15,9 @@ jobs:
 
     steps:
       - id: octo-sts
-        uses: chainguard-dev/octo-sts-action@main
+        uses: octo-sts/action@main
         with:
-          scope: chainguard-dev/octo-sts-action
+          scope: octo-sts/action
           identity: use-action
 
       - uses: actions/checkout@v4
