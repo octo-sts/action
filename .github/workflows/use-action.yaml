@@ -18,7 +18,7 @@ jobs:
         uses: octo-sts/action@main
         with:
           scope: octo-sts/action
-          identity: use-action
+          identity: use-action-this-should-fail
 
       - uses: actions/checkout@v4
       - env:
