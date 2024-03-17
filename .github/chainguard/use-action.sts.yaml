@@ -1,8 +1,7 @@
 issuer: https://token.actions.githubusercontent.com
-subject: repo:octo-sts/action:ref:refs/heads/main
+subject_pattern: repo:chainguard-dev/mono:pull_request
 claim_pattern:
-  job_workflow_ref: octo-sts/action/.github/workflows/use-action.yaml@refs/heads/main
+  job_workflow_ref: octo-sts/action/.github/workflows/use-action.yaml@.*
 
 permissions:
   contents: read
-  issues: write
