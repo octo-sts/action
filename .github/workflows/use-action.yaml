@@ -3,9 +3,6 @@ name: Use Action
 on:
   pull_request_target:
     branches: ['main']
-  workflow_dispatch:
-  push:
-    branches: ['main']
 
 permissions:
   id-token: write # Needed to federate with octo-sts
