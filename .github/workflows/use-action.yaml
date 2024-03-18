@@ -13,13 +13,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+
       - id: octo-sts
-        uses: octo-sts/action@main
+        uses: ./
         with:
           scope: octo-sts/action
           identity: use-action
 
-      - uses: actions/checkout@v4
       - env:
           GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
         run: gh repo list | grep octo-sts
