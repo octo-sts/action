@@ -1,5 +1,5 @@
 issuer: https://token.actions.githubusercontent.com
-subject: repo:chainguard-dev/mono:pull_request
+subject: repo:octo-sts/action:pull_request
 claim_pattern:
   workflow_ref: octo-sts/action/\.github/workflows/use-action\.yaml@refs/heads/main
 
