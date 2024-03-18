@@ -1,8 +1,7 @@
 issuer: https://token.actions.githubusercontent.com
-subject: repo:octo-sts/action:ref:refs/heads/main
+subject: repo:octo-sts/action:pull_request
 claim_pattern:
-  job_workflow_ref: octo-sts/action/.github/workflows/use-action.yaml@refs/heads/main
+  workflow_ref: octo-sts/action/\.github/workflows/use-action\.yaml@refs/heads/main
 
 permissions:
   contents: read
-  issues: write
