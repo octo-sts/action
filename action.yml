@@ -20,6 +20,13 @@ inputs:
       .github/chainguard/{identity}.sts.yaml
     required: true
 
+  endpoint:
+    description: |
+      The endpoint of Octo STS.
+      This option is required if you host Octo STS yourself.
+    required: false
+    default: https://octo-sts.dev/sts/exchange
+
 outputs:
   token:
     description: |

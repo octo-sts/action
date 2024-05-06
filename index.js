@@ -8,6 +8,7 @@ if (!actionsToken || !actionsUrl) {
 
 const scope = process.env.INPUT_SCOPE;
 const identity = process.env.INPUT_IDENTITY;
+const endpoint = process.env.INPUT_ENDPOINT;
 
 if (!scope || !identity) {
     console.log(`::error::Missing required inputs 'scope' and 'identity'`);
@@ -39,7 +40,7 @@ async function fetchWithRetry(url, options = {}, retries = 3, initialDelay = 100
     try {
         const res = await fetchWithRetry(`${actionsUrl}&audience=octo-sts.dev`, { headers: { 'Authorization': `Bearer ${actionsToken}` } }, 5);
         const json = await res.json();
-        const res2 = await fetchWithRetry(`https://octo-sts.dev/sts/exchange?scope=${scope}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${json.value}` } });
+        const res2 = await fetchWithRetry(`${endpoint}?scope=${scope}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${json.value}` } });
         const json2 = await res2.json();
 
         if (!json2.token) { console.log(`::error::${json2.message}`); process.exit(1); }
