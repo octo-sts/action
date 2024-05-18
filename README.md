@@ -1,4 +1,4 @@
-# `octo-sts-action`
+# `octo-sts/action`
 
 This action federates the GitHub Actions identity token for a Github App token
 according to the Trust Policy in the target organization or repository.

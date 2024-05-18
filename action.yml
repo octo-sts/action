@@ -8,6 +8,11 @@ description: |
   organization or repository.
 
 inputs:
+  domain:
+    description: |
+      The domain of the Octo STS instance to use to federate.
+    default: octo-sts.dev
+
   scope:
     description: |
       The org/repo of the repository to which to request access.
