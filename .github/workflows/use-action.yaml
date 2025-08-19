@@ -2,20 +2,24 @@ name: Use Action
 
 on:
   pull_request_target:
-    branches: ['main']
+    branches:
+      - 'main'
 
-permissions:
-  id-token: write # Needed to federate with octo-sts
+permissions: {}
 
 jobs:
   use-action:
     name: Use Action
     runs-on: ubuntu-latest
 
+    permissions:
+      id-token: write # Needed to federate with octo-sts
+
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          persist-credentials: false
 
       - id: octo-sts
         uses: ./
