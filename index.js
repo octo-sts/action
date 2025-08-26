@@ -41,7 +41,11 @@ async function fetchWithRetry(url, options = {}, retries = 3, initialDelay = 100
     try {
         const res = await fetchWithRetry(`${actionsUrl}&audience=${domain}`, { headers: { 'Authorization': `Bearer ${actionsToken}` } }, 5);
         const json = await res.json();
-        const res2 = await fetchWithRetry(`https://${domain}/sts/exchange?scope=${scope}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${json.value}` } });
+        // New scopes array
+        const scopes = [scope];
+        // Pass scopes as a comma-separated string in the URL
+        const scopesParam = scopes.join(',');
+        const res2 = await fetchWithRetry(`https://${domain}/sts/exchange?scope=${scope}&scopes=${scopesParam}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${json.value}` } });
         const json2 = await res2.json();
 
         if (!json2.token) { console.log(`::error::${json2.message}`); process.exit(1); }
