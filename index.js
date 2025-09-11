@@ -1,11 +1,14 @@
 const actionsToken = process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
 const actionsUrl = process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
 
-const crypto = require('crypto');
-const fs = require('fs');
+const crypto = require('node:crypto');
+const fs = require('node:fs');
+const util = require('node:util');
+const { error, debug, addMask, parseOIDC } = require('./util');
+const appendFile = util.promisify(fs.appendFile);
 
 if (!actionsToken || !actionsUrl) {
-    console.log(`::error::Missing required environment variables; have you set 'id-token: write' in your workflow permissions?`);
+    error(`Missing required environment variables; have you set 'id-token: write' in your workflow permissions?`);
     process.exit(1);
 }
 
@@ -14,7 +17,7 @@ const identity = process.env.INPUT_IDENTITY;
 const domain = process.env.INPUT_DOMAIN;
 
 if (!scope || !identity) {
-    console.log(`::error::Missing required inputs 'scope' and 'identity'`);
+    error(`Missing required inputs 'scope' and 'identity'`);
     process.exit(1);
 }
 
@@ -42,29 +45,29 @@ async function fetchWithRetry(url, options = {}, retries = 3, initialDelay = 100
 (async function main() {
     // You can use await inside this function block
     try {
-        console.log('::debug::Fetching ID token from GitHub Actions');
+        debug('Fetching ID token from GitHub Actions');
         const res = await fetchWithRetry(`${actionsUrl}&audience=${domain}`, { headers: { 'Authorization': `Bearer ${actionsToken}` } }, 5);
         const json = await res.json();
 
-        console.log('::debug::Fetching GitHub Token from STS');
+        debug('Fetching GitHub Token from STS');
 
-        // New scopes array
-        const scopes = [scope];
-        // Pass scopes as a comma-separated string in the URL
-        const scopesParam = scopes.join(',');
-        const res2 = await fetchWithRetry(`https://${domain}/sts/exchange?scope=${scope}&scopes=${scopesParam}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${json.value}` } });
+        const parsedToken = parseOIDC(json.value);
+        debug(`OIDC sub: ${parsedToken.sub}`);
+
+        const res2 = await fetchWithRetry(`https://${domain}/sts/exchange?scope=${scope}&scopes=${scope}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${json.value}` } });
         const json2 = await res2.json();
 
-        if (!json2.token) { console.log(`::error::${json2.message}`); process.exit(1); }
+        if (!json2.token) { error(json2.message); process.exit(1); }
         const tok = json2.token;
 
         const tokHash = crypto.createHash('sha256').update(tok).digest('hex');
-        console.log(`Token hash: ${tokHash}`);
+        debug(`Token hash: ${tokHash}`);
 
-        console.log(`::add-mask::${tok}`);
-        fs.appendFile(process.env.GITHUB_OUTPUT, `token=${tok}`, function (err) { if (err) throw err; }); // Write the output.
-        fs.appendFile(process.env.GITHUB_STATE, `token=${tok}`, function (err) { if (err) throw err; }); // Write the state, so the post job can delete the token.
+        addMask(tok);
+        await appendFile(process.env.GITHUB_OUTPUT, `token=${tok}`); // Write the output.
+        await appendFile(process.env.GITHUB_STATE, `token=${tok}`); // Write the state, so the post job can delete the token.
     } catch (err) {
-        console.log(`::error::${err.stack}`); process.exit(1);
+        error(err.stack);
+        process.exit(1);
     }
 })();
