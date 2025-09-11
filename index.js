@@ -52,7 +52,7 @@ async function fetchWithRetry(url, options = {}, retries = 3, initialDelay = 100
         debug('Fetching GitHub Token from STS');
 
         const parsedToken = parseOIDC(json.value);
-        debug(`OIDC sub: ${parsedToken.sub}`);
+        console.log(`Got OIDC sub: ${parsedToken.sub}`);
 
         const res2 = await fetchWithRetry(`https://${domain}/sts/exchange?scope=${scope}&scopes=${scope}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${json.value}` } });
         const json2 = await res2.json();
