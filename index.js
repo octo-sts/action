@@ -1,6 +1,9 @@
 const actionsToken = process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
 const actionsUrl = process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
 
+const crypto = require('crypto');
+const fs = require('fs');
+
 if (!actionsToken || !actionsUrl) {
     console.log(`::error::Missing required environment variables; have you set 'id-token: write' in your workflow permissions?`);
     process.exit(1);
@@ -21,7 +24,7 @@ async function fetchWithRetry(url, options = {}, retries = 3, initialDelay = 100
         try {
             const response = await fetch(url, options);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP error! status: ${response.status}, response: ${await response.text()}`);
             }
             return response;
         } catch (error) {
@@ -39,8 +42,12 @@ async function fetchWithRetry(url, options = {}, retries = 3, initialDelay = 100
 (async function main() {
     // You can use await inside this function block
     try {
+        console.log('::debug::Fetching ID token from GitHub Actions');
         const res = await fetchWithRetry(`${actionsUrl}&audience=${domain}`, { headers: { 'Authorization': `Bearer ${actionsToken}` } }, 5);
         const json = await res.json();
+
+        console.log('::debug::Fetching GitHub Token from STS');
+
         // New scopes array
         const scopes = [scope];
         // Pass scopes as a comma-separated string in the URL
@@ -51,12 +58,10 @@ async function fetchWithRetry(url, options = {}, retries = 3, initialDelay = 100
         if (!json2.token) { console.log(`::error::${json2.message}`); process.exit(1); }
         const tok = json2.token;
 
-        const crypto = require('crypto');
         const tokHash = crypto.createHash('sha256').update(tok).digest('hex');
         console.log(`Token hash: ${tokHash}`);
 
         console.log(`::add-mask::${tok}`);
-        const fs = require('fs');
         fs.appendFile(process.env.GITHUB_OUTPUT, `token=${tok}`, function (err) { if (err) throw err; }); // Write the output.
         fs.appendFile(process.env.GITHUB_STATE, `token=${tok}`, function (err) { if (err) throw err; }); // Write the state, so the post job can delete the token.
     } catch (err) {
