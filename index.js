@@ -39,13 +39,23 @@ async function fetchWithRetry(url, options = {}, retries = 3, initialDelay = 100
 (async function main() {
     // You can use await inside this function block
     try {
+        // First fetch to get the GitHub Actions OIDC for the audience we need.
         const res = await fetchWithRetry(`${actionsUrl}&audience=${domain}`, { headers: { 'Authorization': `Bearer ${actionsToken}` } }, 5);
+        if (!res.ok) {
+            const errorText = await res.text();
+            throw new Error(`GitHub Actions OIDC fetch failed: ${errorText}`);
+        }
         const json = await res.json();
-        // New scopes array
+
+        // Now fetch the token from OctoSTS
         const scopes = [scope];
         // Pass scopes as a comma-separated string in the URL
         const scopesParam = scopes.join(',');
         const res2 = await fetchWithRetry(`https://${domain}/sts/exchange?scope=${scope}&scopes=${scopesParam}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${json.value}` } });
+        if (!res2.ok) {
+            const errorText = await res2.text();
+            throw new Error(`OctoSTS fetch failed: ${errorText}`);
+        }
         const json2 = await res2.json();
 
         if (!json2.token) { console.log(`::error::${json2.message}`); process.exit(1); }
