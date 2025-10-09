@@ -32,6 +32,6 @@ outputs:
     value: ${{ steps.octo-sts.outputs.token }}
 
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'index.js'
   post: 'post.js'
