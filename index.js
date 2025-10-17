@@ -33,7 +33,7 @@ async function fetchWithRetry(url, options = {}, retries = 3, initialDelay = 100
             retries--;
         }
     }
-    throw new Error(`Fetch failed after ${attempt} attempts.`);
+    throw new Error(`Fetch failed after ${attempt} attempts for URL: ${url}.`);
 }
 
 (async function main() {
