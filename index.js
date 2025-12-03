@@ -39,7 +39,8 @@ async function fetchWithRetry(url, options = {}, retries = 3, initialDelay = 100
         try {
             const response = await fetch(url, options);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorBody = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, body: ${errorBody}`);
             }
             return response;
         } catch (error) {
