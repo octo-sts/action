@@ -16,6 +16,16 @@ jobs:
       id-token: write # Needed to federate with octo-sts
 
     steps:
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
+        with:
+          egress-policy: block
+          allowed-endpoints: >
+            *.blob.core.windows.net:443
+            *.githubapp.com:443
+            api.github.com:443
+            github.com:443
+            octo-sts.dev:443
+
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
