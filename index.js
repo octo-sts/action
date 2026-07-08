@@ -68,9 +68,15 @@ if (require.main === module) {
     const scope = process.env.INPUT_SCOPE;
     const identity = process.env.INPUT_IDENTITY;
     const domain = process.env.INPUT_DOMAIN;
+    const scheme = (process.env.INPUT_SCHEME || 'https').toLowerCase();
 
     if (!scope || !identity) {
         console.log(`::error::Missing required inputs 'scope' and 'identity'`);
+        process.exit(1);
+    }
+
+    if (scheme !== 'https' && scheme !== 'http') {
+        console.log(`::error::Invalid 'scheme' input '${scheme}'; must be 'https' or 'http'`);
         process.exit(1);
     }
 
@@ -100,7 +106,7 @@ if (require.main === module) {
         const scopes = [scope];
         // Pass scopes as a comma-separated string in the URL
         const scopesParam = scopes.join(',');
-        const res2 = await fetchWithRetry(`https://${domain}/sts/exchange?scope=${scope}&scopes=${scopesParam}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${json.value}` } });
+        const res2 = await fetchWithRetry(`${scheme}://${domain}/sts/exchange?scope=${scope}&scopes=${scopesParam}&identity=${identity}`, { headers: { 'Authorization': `Bearer ${json.value}` } });
         if (!res2.ok) {
             const errorText = await res2.text();
             throw new Error(`OctoSTS fetch failed: ${errorText}`);

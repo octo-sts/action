@@ -13,6 +13,16 @@ inputs:
       The domain of the Octo STS instance to use to federate.
     default: octo-sts.dev
 
+  scheme:
+    description: |
+      URL scheme used to reach the Octo STS instance: 'https' (default) or 'http'.
+      Use 'http' ONLY for a self-hosted broker on a trusted network — e.g. a
+      ClusterIP Service reached in-cluster and restricted by NetworkPolicy, where
+      TLS is intentionally not terminated. Never use 'http' over an untrusted
+      network: the request carries the OIDC token and the response carries the
+      minted GitHub token.
+    default: https
+
   scope:
     description: |
       The org/repo of the repository to which to request access.
