@@ -37,3 +37,10 @@ permissions:
 ```
 
 See the [Use Action](./.github/workflows/use-action.yaml) workflow for a working example of this, that opens an issue in this repository.
+
+## GitHub Enterprise Server and data residency
+
+When running against a self-hosted Octo STS instance, set the `domain` input to
+that instance. When the job finishes, the action revokes the token through the
+runner's `GITHUB_API_URL`, so revocation works on GitHub Enterprise Server and
+GHE.com as well as github.com.
